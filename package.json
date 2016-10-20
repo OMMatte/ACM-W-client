@@ -31,7 +31,7 @@
     "watch:lint": "nodemon -q -w src/ --ext \".*\" --exec \"npm run lint\"",
     "watch:js": "npm run build:js && watchify index.js -o build/index.js -d",
     "watch:test": "karma start",
-    "watch:test:lint": "nodemon -q -w src/ --ext \".*\" --exec \"npm run test && npm run lint\"",
+    "watch:test:lint": "nodemon -q -w node_modules/acm-w-game/src/ --ext \".*\" --exec \"npm run test && npm run lint\"",
     "watch": "parallelshell \"npm run watch:css\" \"npm run watch:js\" \"npm run watch:test:lint\""
   },
   "babel": {

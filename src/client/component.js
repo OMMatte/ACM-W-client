@@ -1,26 +1,11 @@
-import React from   "react"  ;
+import React from "react";
+import * as othelloGameFactory from "acm-w-game/src/game-factory"
+
 
 export  default React.createClass({
 	getInitialState: function () {
 		return {
-			game: {
-				state: {
-					playerInTurn: "white",
-					board: [
-						[{color: "white"}, {color:null}],
-						[{color: "black"}, {color:null}]
-					]
-				},
-				isValidMove: function(game, {x,y,color}) {
-					return true;
-				},
-				makeMove: function(game, move) {
-					if (!game.isValidMove(game, move)) {
-						throw "Inalid move: ";
-					}
-					game.state.board[move.y][move.x] = {color: move.color};
-				}
-			}
+			game: othelloGameFactory.createDefault()
 		}
 	},
     render: function () {
@@ -31,17 +16,17 @@ export  default React.createClass({
 		return (
             <div>
 				Player in turn: {gameState.playerInTurn}
-				
+
 				<button onClick={this.switchPlayer}>
 					Switch player
 				</button>
-			
+
 				<table style={borderStyle}>
-				<tbody>	
+				<tbody>
 				{gameState.board.map(
 					function(row,rowIndex){
 						return (
-							<tr style={borderStyle} key={rowIndex}> 
+							<tr style={borderStyle} key={rowIndex}>
 							{
 								row.map(
 									function(cell,columIndex) {
@@ -59,16 +44,16 @@ export  default React.createClass({
 											default:
 												throw "Invalid cell.color value.";
 										}
-										
+
 										var tdStyle = {
-											border: "1px solid black", 
+											border: "1px solid black",
 											width: 20,
 											height: 20,
 											backgroundColor: cellColor
 										};
 										return (
-										<td 
-											style={tdStyle} 
+										<td
+											style={tdStyle}
 											onClick={thisComponent.onCellClick.bind(thisComponent,{x: rowIndex,y: columIndex})}
 											key={columIndex}
 										/>

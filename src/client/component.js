@@ -58,7 +58,7 @@ var GameComponent = React.createClass({
             case null:
                 var move = {x: x, y: y};
                 var isValidMove = othelloCore.isValidMove(gameState, move);
-                return isValidMove ? "green" : "red";
+                return isValidMove ? "green" : "gray";
             default:
                 throw "Invalid cell.color value: " + cell.color;
         }

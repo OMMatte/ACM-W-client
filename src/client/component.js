@@ -16,7 +16,7 @@ export  default React.createClass({
 				},
 				makeMove: function(game, move) {
 					if (!game.isValidMove(game, move)) {
-						throw "Inalid move: ";
+						throw "Invalid move: " + move;
 					}
 					game.state.board[move.y][move.x] = {color: move.color};
 				}
@@ -57,7 +57,7 @@ export  default React.createClass({
 												cellColor="green";
 												break;
 											default:
-												throw "Invalid cell.color value.";
+												throw "Invalid cell.color value: " + cellColor;
 										}
 										
 										var tdStyle = {
@@ -69,7 +69,7 @@ export  default React.createClass({
 										return (
 										<td 
 											style={tdStyle} 
-											onClick={thisComponent.onCellClick.bind(thisComponent,{x: rowIndex,y: columIndex})}
+											onClick={thisComponent.onCellClick.bind(thisComponent,{x: columIndex, y: rowIndex})}
 											key={columIndex}
 										/>
 										);
@@ -101,15 +101,17 @@ export  default React.createClass({
 	onCellClick: function({x,y}){
 		var game = this.state.game;
 		console.log("Pressed:","{",x,",",y,"}");
-		var move = {x:x, y:y, color:game.playerInTurn};
+		var move = {x:x, y:y, color: game.state.playerInTurn};
 		var isValidMove = game.isValidMove(game, move);
 		if (isValidMove) {
 			console.log("The move is valid.");
 			game.makeMove(game, move);
+			this.switchPlayer();
 			this.forceUpdate();
 		}
 		else {
 			console.log("The move is invalid.");
 		}
+		
 	}
 });

@@ -81,7 +81,6 @@ export  default React.createClass({
 
         return (
             <div>
-                Player in turn: {game.state.playerInTurn}
 
                 <button onClick={this.switchPlayer}>
                     Switch player
@@ -97,6 +96,9 @@ export  default React.createClass({
                         Step forward
                     </button>) : null}
 
+                <h1>Player in turn: {visualGameState.playerInTurn}</h1>
+                <h1>White player score: {othelloCore.score(visualGameState, "white")}</h1>
+                <h1>Black player score: {othelloCore.score(visualGameState, "black")}</h1>
                 <GameComponent gameState={visualGameState} onCellClick={thisComponent.onCellClick}/>
             </div>
         );

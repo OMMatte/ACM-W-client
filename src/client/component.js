@@ -25,7 +25,8 @@ export  default React.createClass({
 				}
 			}
 			*/
-			game: othelloGameFactory.createDefault()
+			game: othelloGameFactory.createDefault(),
+			historyIndex: null
 		}
 	},
     render: function () {
@@ -33,6 +34,7 @@ export  default React.createClass({
 		var thisComponent = this;
 		console.log(game);
 		var borderStyle={border: "1px solid black"};
+		
 		return (
             <div>
 				Player in turn: {game.state.playerInTurn}
@@ -40,7 +42,17 @@ export  default React.createClass({
 				<button onClick={this.switchPlayer}>
 					Switch player
 				</button>
-
+				
+				{game.state.history.length !== 0 && thisComponent.state.historyIndex > 0 ? (
+				<button onClick={this.stepBack}>
+					Step back
+				</button>) : null}
+				
+				{game.state.historyIndex === null ? (
+				<button onClick={this.stepForward}>
+					Step forward
+				</button>) : null}
+				
 				<table style={borderStyle}>
 				<tbody>
 				{game.state.board.map(
@@ -130,9 +142,17 @@ export  default React.createClass({
 			case null:
 				var move = {x:x, y:y};
 				var isValidMove = game.isValidMove(move);
-				return "green";
+				return isValidMove ? "green" : "red";
 			default:
 				throw "Invalid cell.color value: " + cell.color;
+		}
+	},
+	stepBack: function() {
+		var game = this.state.game;
+		if (historyIndex === null) {
+			this.setState({historyIndex: game.state.history.length - 1})
+		} else {
+			this.setState({historyIndex: this.state.historyIndex - 1})
 		}
 	}
 });

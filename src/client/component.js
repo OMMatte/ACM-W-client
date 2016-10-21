@@ -1,8 +1,11 @@
-import React from   "react"  ;
+import React from "react";
+import * as othelloGameFactory from "acm-w-game/src/game-factory"
+
 
 export  default React.createClass({
 	getInitialState: function () {
 		return {
+			/*
 			game: {
 				state: {
 					playerInTurn: "white",
@@ -21,6 +24,8 @@ export  default React.createClass({
 					game.state.board[move.y][move.x] = {color: move.color};
 				}
 			}
+			*/
+			game: othelloGameFactory.createDefault()
 		}
 	},
     render: function () {
@@ -31,17 +36,17 @@ export  default React.createClass({
 		return (
             <div>
 				Player in turn: {gameState.playerInTurn}
-				
+
 				<button onClick={this.switchPlayer}>
 					Switch player
 				</button>
-			
+
 				<table style={borderStyle}>
-				<tbody>	
+				<tbody>
 				{gameState.board.map(
 					function(row,rowIndex){
 						return (
-							<tr style={borderStyle} key={rowIndex}> 
+							<tr style={borderStyle} key={rowIndex}>
 							{
 								row.map(
 									function(cell,columIndex) {
@@ -59,9 +64,9 @@ export  default React.createClass({
 											default:
 												throw "Invalid cell.color value: " + cellColor;
 										}
-										
+
 										var tdStyle = {
-											border: "1px solid black", 
+											border: "1px solid black",
 											width: 20,
 											height: 20,
 											backgroundColor: cellColor
@@ -101,12 +106,11 @@ export  default React.createClass({
 	onCellClick: function({x,y}){
 		var game = this.state.game;
 		console.log("Pressed:","{",x,",",y,"}");
-		var move = {x:x, y:y, color: game.state.playerInTurn};
-		var isValidMove = game.isValidMove(game, move);
+		var move = {x:x, y:y};
+		var isValidMove = game.isValidMove(move);
 		if (isValidMove) {
 			console.log("The move is valid.");
-			game.makeMove(game, move);
-			this.switchPlayer();
+			game.makeMove(move);
 			this.forceUpdate();
 		}
 		else {

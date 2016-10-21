@@ -29,13 +29,13 @@ export  default React.createClass({
 		}
 	},
     render: function () {
-		var gameState = this.state.game.state;
+		var game = this.state.game;
 		var thisComponent = this;
-		console.log(this.state.game);
+		console.log(game);
 		var borderStyle={border: "1px solid black"};
 		return (
             <div>
-				Player in turn: {gameState.playerInTurn}
+				Player in turn: {game.state.playerInTurn}
 
 				<button onClick={this.switchPlayer}>
 					Switch player
@@ -43,7 +43,7 @@ export  default React.createClass({
 
 				<table style={borderStyle}>
 				<tbody>
-				{gameState.board.map(
+				{game.state.board.map(
 					function(row,rowIndex){
 						return (
 							<tr style={borderStyle} key={rowIndex}>
@@ -51,6 +51,8 @@ export  default React.createClass({
 								row.map(
 									function(cell,columIndex) {
 										var cellColor;
+										cellColor = thisComponent.getCellColor({x: columIndex, y: rowIndex});
+										/*
 										switch (cell.color) {
 											case "white":
 												cellColor="white";
@@ -63,7 +65,7 @@ export  default React.createClass({
 												break;
 											default:
 												throw "Invalid cell.color value: " + cellColor;
-										}
+										}*/
 
 										var tdStyle = {
 											border: "1px solid black",
@@ -116,6 +118,21 @@ export  default React.createClass({
 		else {
 			console.log("The move is invalid.");
 		}
-		
+	},
+	getCellColor: function({x,y}) {
+		var game = this.state.game;
+		var cell = game.state.board[y][x];
+		switch (cell.color) {
+			case "white":
+				return "white";
+			case "black":
+				return "black";
+			case null:
+				var move = {x:x, y:y};
+				var isValidMove = game.isValidMove(move);
+				return "green";
+			default:
+				throw "Invalid cell.color value: " + cell.color;
+		}
 	}
 });

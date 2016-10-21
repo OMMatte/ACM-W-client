@@ -2,13 +2,13 @@
   "name": "acm-w-client",
   "version": "1.0.0",
   "dependencies": {
-    "game": "https://github.com/OMMatte/ACM-W-game"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
+    "eslint": "^3.8.1",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",
@@ -17,7 +17,8 @@
     "karma-mocha-reporter": "^2.2.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "node-sass": "^3.10.1",
-    "phantomjs": "^2.1.7",
+    "nodemon": "^1.11.0",
+    "phantomjs-prebuilt": "^2.1.13",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "watchify": "^3.7.0"

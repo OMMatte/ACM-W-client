@@ -65,7 +65,7 @@ var GameComponent = React.createClass({
     }
 });
 
-export  default React.createClass({
+export default React.createClass({
     getInitialState: function () {
         return {
             game: othelloGameFactory.createDefault(),
@@ -78,6 +78,17 @@ export  default React.createClass({
         console.log(game);
 
         var visualGameState = this.state.historyIndex === null ? game.state : game.state.history[this.state.historyIndex];
+        var whitePlayerScore = othelloCore.score(visualGameState, "white");
+        var blackPlayerScore = othelloCore.score(visualGameState, "black");
+
+        var playerWonText;
+        if (whitePlayerScore === blackPlayerScore) {
+            playerWonText = "It is a draw!";
+        } else if (whitePlayerScore > blackPlayerScore) {
+            playerWonText = "White player won!";
+        } else {
+            playerWonText = "Black player won!";
+        }
 
         return (
             <div>
@@ -97,9 +108,10 @@ export  default React.createClass({
                     </button>) : null}
 
                 <h1>Player in turn: {visualGameState.playerInTurn}</h1>
-                <h1>White player score: {othelloCore.score(visualGameState, "white")}</h1>
-                <h1>Black player score: {othelloCore.score(visualGameState, "black")}</h1>
+                <h1>White player score: {whitePlayerScore}</h1>
+                <h1>Black player score: {blackPlayerScore}</h1>
                 <GameComponent gameState={visualGameState} onCellClick={thisComponent.onCellClick}/>
+                {othelloCore.isGameOver(visualGameState) ? <h1>{playerWonText}</h1> : null}
             </div>
         );
     },

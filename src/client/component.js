@@ -1,12 +1,28 @@
 import React from "react";
 import * as othelloGameFactory from "acm-w-game/src/game-factory";
-import * as othelloCore from "acm-w-game/src/core";
+import * as othelloCoreFunctions from "acm-w-game/src/core-functions";
 
 var GameComponent = React.createClass({
     render: function () {
         var thisComponent = this;
         var gameState = this.props.gameState;
         var borderStyle = {border: "1px solid black"};
+
+        function getCellColor ({x,y}) {
+            var cell = gameState.board[y][x];
+            switch (cell.color) {
+                case "white":
+                    return "white";
+                case "black":
+                    return "black";
+                case null:
+                    var move = {x: x, y: y};
+                    var isValidMove = othelloCoreFunctions.isValidMove(gameState, move);
+                    return isValidMove ? "green" : "gray";
+                default:
+                    throw "Invalid cell.color value: " + cell.color;
+            }
+        }
 
         return (
             <table style={borderStyle}>
@@ -18,18 +34,14 @@ var GameComponent = React.createClass({
                                 {
                                     row.map(
                                         function (cell, columIndex) {
-                                            var cellColor;
-                                            cellColor = thisComponent.getCellColor({x: columIndex, y: rowIndex});
-
-                                            var tdStyle = {
-                                                border: "1px solid black",
-                                                width: 50,
-                                                height: 50,
-                                                backgroundColor: cellColor
-                                            };
                                             return (
                                                 <td
-                                                    style={tdStyle}
+                                                    style={{
+                                                        border: "1px solid black",
+                                                        width: 50,
+                                                        height: 50,
+                                                        backgroundColor: getCellColor({x: columIndex, y: rowIndex})
+                                                    }}
                                                     onClick={thisComponent.onCellClick.bind(thisComponent,{x: columIndex, y: rowIndex})}
                                                     key={columIndex}
                                                 />
@@ -46,22 +58,6 @@ var GameComponent = React.createClass({
     },
     onCellClick: function (pos) {
         this.props.onCellClick(pos);
-    },
-    getCellColor: function ({x,y}) {
-        var gameState = this.props.gameState;
-        var cell = gameState.board[y][x];
-        switch (cell.color) {
-            case "white":
-                return "white";
-            case "black":
-                return "black";
-            case null:
-                var move = {x: x, y: y};
-                var isValidMove = othelloCore.isValidMove(gameState, move);
-                return isValidMove ? "green" : "gray";
-            default:
-                throw "Invalid cell.color value: " + cell.color;
-        }
     }
 });
 
@@ -78,8 +74,8 @@ export default React.createClass({
         console.log(game);
 
         var visualGameState = this.state.historyIndex === null ? game.state : game.state.history[this.state.historyIndex];
-        var whitePlayerScore = othelloCore.score(visualGameState, "white");
-        var blackPlayerScore = othelloCore.score(visualGameState, "black");
+        var whitePlayerScore = othelloCoreFunctions.score(visualGameState, "white");
+        var blackPlayerScore = othelloCoreFunctions.score(visualGameState, "black");
 
         var playerWonText;
         if (whitePlayerScore === blackPlayerScore) {
@@ -111,7 +107,7 @@ export default React.createClass({
                 <h1>White player score: {whitePlayerScore}</h1>
                 <h1>Black player score: {blackPlayerScore}</h1>
                 <GameComponent gameState={visualGameState} onCellClick={thisComponent.onCellClick}/>
-                {othelloCore.isGameOver(visualGameState) ? <h1>{playerWonText}</h1> : null}
+                {othelloCoreFunctions.isGameOver(visualGameState) ? <h1>{playerWonText}</h1> : null}
             </div>
         );
     },
